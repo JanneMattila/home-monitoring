@@ -1,4 +1,4 @@
-<Project Sdk="Microsoft.NET.Sdk">
+﻿<Project Sdk="Microsoft.NET.Sdk">
 
   <PropertyGroup>
     <OutputType>Exe</OutputType>
@@ -16,6 +16,10 @@
     <PackageReference Include="Microsoft.Extensions.Configuration.UserSecrets" Version="5.0.0" />
     <PackageReference Include="OpenTelemetry" Version="1.0.1" />
     <PackageReference Include="OpenTelemetry.Exporter.Console" Version="1.0.1" />
+    <PackageReference Include="ZigBeeNet" Version="1.4.0" />
+    <PackageReference Include="ZigBeeNet.DataStore.Json" Version="1.0.0" />
+    <PackageReference Include="ZigbeeNet.Hardware.ConBee" Version="1.1.1" />
+    <PackageReference Include="ZigBeeNet.Transport.SerialPort" Version="1.1.1" />
   </ItemGroup>
 
 </Project>
