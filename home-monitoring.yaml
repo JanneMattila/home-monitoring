@@ -1,0 +1,30 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: home-monitoring
+spec:
+  replicas: 0
+  selector:
+    matchLabels:
+      app: home-monitoring
+  template:
+    metadata:
+      labels:
+        app: home-monitoring
+    spec:
+      nodeSelector:
+        "beta.kubernetes.io/os": linux
+      containers:
+      - image: jannemattila/home-monitoring:latest
+        name: home-monitoring
+        imagePullPolicy: Always
+        resources:
+          requests:
+            cpu: 50m
+            memory: 50Mi
+          limits:
+            cpu: 100m
+            memory: 100Mi
+        env:
+          - name: navigateUri
+            value: "http://localhost:3000"
