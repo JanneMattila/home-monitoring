@@ -29,7 +29,8 @@ namespace HomeMonitoring
             var navigateUri = configuration.GetValue<string>("navigateUri");
 
             var sensorScanner = new SensorScanner();
-            await sensorScanner.ScanAsync(navigateUri);
+            sensorScanner.Scan(navigateUri);
+            await Task.CompletedTask;
         }
     }
 }

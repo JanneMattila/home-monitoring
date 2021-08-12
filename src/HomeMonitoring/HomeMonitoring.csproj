@@ -9,6 +9,8 @@
   </PropertyGroup>
 
   <ItemGroup>
+    <PackageReference Include="Microsoft.Extensions.Logging.Console" Version="5.0.0" />
+    <PackageReference Include="Microsoft.Extensions.Logging.Debug" Version="5.0.0" />
     <PackageReference Include="Microsoft.VisualStudio.Azure.Containers.Tools.Targets" Version="1.10.14" />
     <PackageReference Include="Microsoft.Extensions.Configuration.Binder" Version="5.0.0" />
     <PackageReference Include="Microsoft.Extensions.Configuration.EnvironmentVariables" Version="5.0.0" />
@@ -16,10 +18,12 @@
     <PackageReference Include="Microsoft.Extensions.Configuration.UserSecrets" Version="5.0.0" />
     <PackageReference Include="OpenTelemetry" Version="1.0.1" />
     <PackageReference Include="OpenTelemetry.Exporter.Console" Version="1.0.1" />
-    <PackageReference Include="ZigBeeNet" Version="1.4.0" />
-    <PackageReference Include="ZigBeeNet.DataStore.Json" Version="1.0.0" />
-    <PackageReference Include="ZigbeeNet.Hardware.ConBee" Version="1.1.1" />
-    <PackageReference Include="ZigBeeNet.Transport.SerialPort" Version="1.1.1" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <ProjectReference Include="..\..\..\..\Mr-Markus\ZigbeeNet\libraries\ZigBeeNet.DataStore.Json\ZigBeeNet.DataStore.Json.csproj" />
+    <ProjectReference Include="..\..\..\..\Mr-Markus\ZigbeeNet\libraries\ZigbeeNet.Hardware.ConBee\ZigbeeNet.Hardware.ConBee.csproj" />
+    <ProjectReference Include="..\..\..\..\Mr-Markus\ZigbeeNet\libraries\ZigBeeNet.Transport.SerialPort\ZigBeeNet.Transport.SerialPort.csproj" />
   </ItemGroup>
 
 </Project>
