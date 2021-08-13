@@ -66,20 +66,11 @@ namespace HomeMonitoring
                 return;
             }
 
-            Console.WriteLine($"PAN ID           = {networkManager.ZigBeePanId}");
-            Console.WriteLine($"Extended PAN ID  = {networkManager.ZigBeeExtendedPanId}");
-            Console.WriteLine($"Channel          = {networkManager.ZigbeeChannel}");
-
             var coordinator = networkManager.GetNode(0);
 
-            // ZclTemperatureMeasurementCluster.CLUSTER_ID
-            //{ 0x0402, new ZclClusterType(0x0402, "Temperature Measurement", ClusterType.TEMPERATURE_MEASUREMENT, (endpoint) => new ZclTemperatureMeasurementCluster(endpoint)) },
-            //{ 0x0403, new ZclClusterType(0x0403, "Pressure Measurement", ClusterType.PRESSURE_MEASUREMENT, (endpoint) => new ZclPressureMeasurementCluster(endpoint)) },
-            //{ 0x0405, new ZclClusterType(0x0405, "Relative Humidity Measurement", ClusterType.RELATIVE_HUMIDITY_MEASUREMENT, (endpoint) => new ZclRelativeHumidityMeasurementCluster(endpoint)) },
-
-            coordinator.PermitJoin(true);
             while (!_cancellationTokenSource.IsCancellationRequested)
             {
+                coordinator.PermitJoin(true);
                 var nodes = networkManager.Nodes;
                 foreach (var node in nodes)
                 {

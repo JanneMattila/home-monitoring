@@ -8,13 +8,18 @@ namespace HomeMonitoring
     {
         public void CommandReceived(ZigBeeCommand command)
         {
-            Console.WriteLine(command);
             if (command is ReportAttributesCommand reportAttributesCommand)
             {
+                Console.WriteLine(DateTime.Now);
+                Console.WriteLine(reportAttributesCommand);
                 foreach (var report in reportAttributesCommand.Reports)
                 {
                     Console.WriteLine($" Report {report}");
                 }
+            }
+            else
+            {
+                Console.WriteLine(command);
             }
         }
     }

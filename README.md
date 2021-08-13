@@ -1,2 +1,3 @@
-# home-monitoring
+# Home Monitoring
+
 Monitoring sensors using Zigbee
