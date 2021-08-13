@@ -16,8 +16,8 @@ namespace HomeMonitoring
 {
     public class SensorScanner
     {
-        private readonly ActivitySource _source = new ActivitySource("SensorScanner");
-        private readonly CancellationTokenSource _cancellationTokenSource = new CancellationTokenSource();
+        private readonly ActivitySource _source = new("SensorScanner");
+        private readonly CancellationTokenSource _cancellationTokenSource = new();
 
         public SensorScanner()
         {
@@ -29,13 +29,11 @@ namespace HomeMonitoring
             };
         }
 
-        public void Scan(string navigateUri)
+        public void Scan(string databasePath, string serialPort)
         {
-            var activity = _source.StartActivity("ScanAsync");
+            var activity = _source.StartActivity("Scan");
 
-            var folderPath = @"\temp\zigbee";
-
-            var zigbeePort = new ZigBeeSerialPort("COM3");
+            var zigbeePort = new ZigBeeSerialPort(serialPort);
             var dongle = new ZigbeeDongleConBee(zigbeePort);
             var networkManager = new ZigBeeNetworkManager(dongle);
             networkManager.AddNetworkNodeListener(new ConsoleNetworkNodeListener());
@@ -51,7 +49,7 @@ namespace HomeMonitoring
             networkManager.AddExtension(new ZigBeeBasicServerExtension());
             networkManager.AddExtension(new ZigBeeIasCieExtension());
 
-            var dataStore = new JsonNetworkDataStore(folderPath);
+            var dataStore = new JsonNetworkDataStore(databasePath);
             networkManager.SetNetworkDataStore(dataStore);
 
             var discoveryExtension = new ZigBeeDiscoveryExtension();
@@ -77,40 +75,23 @@ namespace HomeMonitoring
                     Console.WriteLine($"{node.LogicalType} {node.NetworkAddress} {node.LastUpdateTime}");
                     if (node.Endpoints.Any())
                     {
-                        var attributes = node.Endpoints.FirstOrDefault().Value
-                           .GetInputCluster(ZclBasicCluster.CLUSTER_ID)
-                           .GetAttributes();
-                        foreach (var attribute in attributes)
+                        var endpoint = node.Endpoints.FirstOrDefault();
+                        var inputClusterIds = endpoint.Value.GetInputClusterIds();
+                        foreach (var inputClusterId in inputClusterIds)
                         {
-                            if (attribute.LastReportTime != DateTime.MinValue)
+                            var cluster = endpoint.Value.GetInputCluster(inputClusterId);
+                            var attributes = cluster.GetAttributes();
+                            foreach (var attribute in attributes)
                             {
-                                Console.WriteLine($" - {attribute.Name}: {attribute.LastValue} {attribute.LastReportTime}");
-                            }
-                        }
-                        var attributes2 = node.Endpoints.FirstOrDefault().Value
-                           .GetInputCluster(ZclTemperatureMeasurementCluster.CLUSTER_ID)
-                           .GetAttributes();
-                        foreach (var attribute in attributes2)
-                        {
-                            if (attribute.LastReportTime != DateTime.MinValue)
-                            {
-                                Console.WriteLine($" - {attribute.Name}: {attribute.LastValue} {attribute.LastReportTime}");
-                            }
-                        }
-                        var attributes3 = node.Endpoints.FirstOrDefault().Value
-                           .GetInputCluster(ZclRelativeHumidityMeasurementCluster.CLUSTER_ID)
-                           .GetAttributes();
-                        foreach (var attribute in attributes3)
-                        {
-                            if (attribute.LastReportTime != DateTime.MinValue)
-                            {
-                                Console.WriteLine($" - {attribute.Name}: {attribute.LastValue} {attribute.LastReportTime}");
+                                if (attribute.LastReportTime != DateTime.MinValue)
+                                {
+                                    Console.WriteLine($" - {attribute.Name}: {attribute.LastValue} {attribute.LastReportTime}");
+                                }
                             }
                         }
                     }
                 }
 
-                Thread.Sleep(5_000);
                 Console.WriteLine(new string('*', 30));
                 Console.ReadLine();
             }

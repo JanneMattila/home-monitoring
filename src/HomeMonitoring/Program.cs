@@ -21,15 +21,16 @@ namespace HomeMonitoring
 #if DEBUG
                 .AddUserSecrets<Program>()
 #endif
-                .AddJsonFile("appsettings.json", optional: true, reloadOnChange: true)
+                .AddJsonFile("appsettings.json", optional: true)
                 .AddEnvironmentVariables();
 
             var configuration = builder.Build();
 
-            var navigateUri = configuration.GetValue<string>("navigateUri");
+            var databasePath = configuration.GetValue<string>("databasePath");
+            var serialPort = configuration.GetValue<string>("serialPort");
 
             var sensorScanner = new SensorScanner();
-            sensorScanner.Scan(navigateUri);
+            sensorScanner.Scan(databasePath, serialPort);
             await Task.CompletedTask;
         }
     }
