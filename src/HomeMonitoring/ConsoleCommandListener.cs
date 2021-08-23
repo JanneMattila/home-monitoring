@@ -9,50 +9,51 @@ namespace HomeMonitoring
 {
     public class ConsoleCommandListener : IZigBeeCommandListener
     {
+        public DateTime _started = DateTime.Now;
+
+        public bool ProcessMeasurement(
+            ReportAttributesCommand reportAttributesCommand,
+            ushort attributeIdentifier,
+            double modifier,
+            string unit)
+        {
+            var measuredValue = reportAttributesCommand.Reports.FirstOrDefault(o => o.AttributeIdentifier == attributeIdentifier);
+            if (measuredValue != null)
+            {
+
+                var value = Convert.ToDouble(measuredValue.AttributeValue);
+                Console.WriteLine($"{DateTime.Now} {(DateTime.Now - _started).TotalSeconds:F0} {value / modifier} {unit}");
+                _started = DateTime.Now;
+                return true;
+            }
+            return false;
+        }
         public void CommandReceived(ZigBeeCommand command)
         {
             if (command is ReportAttributesCommand reportAttributesCommand)
             {
+                var processed = false;
                 if (reportAttributesCommand.ClusterId == ZclPressureMeasurementCluster.CLUSTER_ID)
                 {
-                    var measuredValue = reportAttributesCommand.Reports.FirstOrDefault(
-                        o => o.AttributeIdentifier == ZclPressureMeasurementCluster.ATTR_SCALEDVALUE);
-                    if (measuredValue != null && measuredValue.AttributeDataType.DataType == DataType.SIGNED_16_BIT_INTEGER)
-                    {
-                        
-                        var value = Convert.ToDouble(measuredValue.AttributeValue);
-                        Console.WriteLine($"{DateTime.Now} {value / 100} kPa");
-                        return;
-                    }
+                    processed = ProcessMeasurement(reportAttributesCommand, ZclPressureMeasurementCluster.ATTR_SCALEDVALUE, 100, "kPa");
                 }
                 else if (reportAttributesCommand.ClusterId == ZclRelativeHumidityMeasurementCluster.CLUSTER_ID)
                 {
-                    var measuredValue = reportAttributesCommand.Reports.FirstOrDefault(
-                        o => o.AttributeIdentifier == ZclRelativeHumidityMeasurementCluster.ATTR_MEASUREDVALUE);
-                    if (measuredValue != null && measuredValue.AttributeDataType.DataType == DataType.UNSIGNED_16_BIT_INTEGER)
-                    {
-                        var value = Convert.ToDouble(measuredValue.AttributeValue);
-                        Console.WriteLine($"{DateTime.Now} {value / 100} %");
-                        return;
-                    }
+                    processed = ProcessMeasurement(reportAttributesCommand, ZclRelativeHumidityMeasurementCluster.ATTR_MEASUREDVALUE, 100, "%");
                 }
                 else if (reportAttributesCommand.ClusterId == ZclTemperatureMeasurementCluster.CLUSTER_ID)
                 {
-                    var measuredValue = reportAttributesCommand.Reports.FirstOrDefault(
-                        o => o.AttributeIdentifier == ZclTemperatureMeasurementCluster.ATTR_MEASUREDVALUE);
-                    if (measuredValue != null && measuredValue.AttributeDataType.DataType == DataType.SIGNED_16_BIT_INTEGER)
-                    {
-                        var value = Convert.ToDouble(measuredValue.AttributeValue);
-                        Console.WriteLine($"{DateTime.Now} {value / 100} °C");
-                        return;
-                    }
+                    processed = ProcessMeasurement(reportAttributesCommand, ZclTemperatureMeasurementCluster.ATTR_MEASUREDVALUE, 100, "°C");
                 }
 
-                Console.WriteLine(DateTime.Now);
-                Console.WriteLine(reportAttributesCommand);
-                foreach (var report in reportAttributesCommand.Reports)
+                if (!processed)
                 {
-                    Console.WriteLine($" Report {report}");
+                    Console.WriteLine(DateTime.Now);
+                    Console.WriteLine(reportAttributesCommand);
+                    foreach (var report in reportAttributesCommand.Reports)
+                    {
+                        Console.WriteLine($" Report {report}");
+                    }
                 }
             }
             else
