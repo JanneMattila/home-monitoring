@@ -29,7 +29,7 @@ namespace HomeMonitoring
             };
         }
 
-        public void Scan(string databasePath, string serialPort)
+        public void Scan(string databasePath, string sensorDataPath, string serialPort)
         {
             var activity = _source.StartActivity("Scan");
 
@@ -38,7 +38,7 @@ namespace HomeMonitoring
             var networkManager = new ZigBeeNetworkManager(dongle);
             networkManager.AddNetworkNodeListener(new ConsoleNetworkNodeListener());
             networkManager.AddCommandListener(new ZigBeeTransaction(networkManager));
-            networkManager.AddCommandListener(new ConsoleCommandListener());
+            networkManager.AddCommandListener(new ConsoleCommandListener(sensorDataPath));
 
             networkManager.AddSupportedClientCluster(ZclOnOffCluster.CLUSTER_ID);
             networkManager.AddSupportedClientCluster(ZclMultistateOutputBasicCluster.CLUSTER_ID);

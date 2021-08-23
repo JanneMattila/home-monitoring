@@ -27,10 +27,11 @@ namespace HomeMonitoring
             var configuration = builder.Build();
 
             var databasePath = configuration.GetValue<string>("databasePath");
+            var sensorDataPath = configuration.GetValue<string>("sensorDataPath");
             var serialPort = configuration.GetValue<string>("serialPort");
 
             var sensorScanner = new SensorScanner();
-            sensorScanner.Scan(databasePath, serialPort);
+            sensorScanner.Scan(databasePath, sensorDataPath, serialPort);
             await Task.CompletedTask;
         }
     }
