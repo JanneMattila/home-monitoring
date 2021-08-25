@@ -31,6 +31,10 @@ namespace HomeMonitoring
                     _cancellationTokenSource.Cancel();
                     _exiting = true;
                 }
+                else
+                {
+                    Console.WriteLine("Exiting!");
+                }
             };
         }
 
