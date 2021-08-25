@@ -1,8 +1,11 @@
 ﻿using Microsoft.Extensions.Configuration;
+using Microsoft.Extensions.Logging;
+using Microsoft.Extensions.Logging.Console;
 using OpenTelemetry;
 using OpenTelemetry.Trace;
 using System;
 using System.Threading.Tasks;
+using ZigBeeNet.Util;
 
 namespace HomeMonitoring
 {
@@ -15,6 +18,21 @@ namespace HomeMonitoring
                 .AddSource("HomeMonitoring")
                 .AddConsoleExporter()
                 .Build();
+
+            // Set logging for ZigBeeNet
+            ILoggerFactory _factory = LoggerFactory.Create(builder =>
+            {
+                builder
+                    .SetMinimumLevel(LogLevel.Debug)
+                    .AddDebug()
+                    .AddSimpleConsole(c =>
+                    {
+                        c.ColorBehavior = LoggerColorBehavior.Enabled;
+                        c.SingleLine = true;
+                        c.TimestampFormat = "[HH:mm:ss] ";
+                    });
+            });
+            LogManager.SetFactory(_factory);
 
             var builder = new ConfigurationBuilder()
                 .SetBasePath(AppContext.BaseDirectory)
