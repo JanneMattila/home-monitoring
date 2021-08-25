@@ -18,14 +18,19 @@ namespace HomeMonitoring
     {
         private readonly ActivitySource _source = new("SensorScanner");
         private readonly CancellationTokenSource _cancellationTokenSource = new();
+        private bool _exiting = false;
 
         public SensorScanner()
         {
             Console.CancelKeyPress += (sender, a) =>
             {
-                a.Cancel = true;
-                Console.WriteLine("Closing down...");
-                _cancellationTokenSource.Cancel();
+                if (!_exiting)
+                {
+                    a.Cancel = true;
+                    Console.WriteLine("Closing down...");
+                    _cancellationTokenSource.Cancel();
+                    _exiting = true;
+                }
             };
         }
 
