@@ -3,16 +3,19 @@ using Microsoft.Azure.WebJobs;
 using Microsoft.Extensions.Logging;
 using System;
 using System.Collections.Generic;
+using System.Globalization;
+using System.IO;
 using System.Text;
+using System.Threading.Tasks;
 
 namespace HomeMonitoringBackend
 {
     public static class EventHubProcessorFunction
     {
         [FunctionName("EventHubProcessorFunction")]
-        [return: Blob("history/{DateTime}", Connection = "Storage")]
-        public static string Run(
+        public static async Task Run(
             [EventHubTrigger("history", Connection = "EventHub")] EventData[] events,
+            Binder binder,
             ILogger log)
         {
             var sb = new StringBuilder();
@@ -33,7 +36,16 @@ namespace HomeMonitoringBackend
 
             sb.Append(string.Join(',', messages));
             sb.Append("]");
-            return sb.ToString();
+
+            var filename = DateTime.Now.ToString("yyyy/MM/dd/HHmmss-fffff", CultureInfo.InvariantCulture);
+            var attributes = new Attribute[]
+            {
+                new BlobAttribute($"history/{filename}.json", FileAccess.Write),
+                new StorageAccountAttribute("HistoryStorage")
+            };
+
+            using var writer = await binder.BindAsync<TextWriter>(attributes);
+            writer.Write(sb.ToString());
         }
     }
 }
