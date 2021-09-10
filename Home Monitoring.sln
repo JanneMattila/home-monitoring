@@ -29,6 +29,8 @@ Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "docs", "docs", "{9D6E281D-2
 		docs\setup.md = docs\setup.md
 	EndProjectSection
 EndProject
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "HomeMonitoringBackend", "src\HomeMonitoringBackend\HomeMonitoringBackend.csproj", "{A5AE217C-D0AE-40E6-8421-38560CDB50C9}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -39,6 +41,10 @@ Global
 		{314F4517-B69B-4E1D-816A-9CB4024AF70B}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{314F4517-B69B-4E1D-816A-9CB4024AF70B}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{314F4517-B69B-4E1D-816A-9CB4024AF70B}.Release|Any CPU.Build.0 = Release|Any CPU
+		{A5AE217C-D0AE-40E6-8421-38560CDB50C9}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{A5AE217C-D0AE-40E6-8421-38560CDB50C9}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{A5AE217C-D0AE-40E6-8421-38560CDB50C9}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{A5AE217C-D0AE-40E6-8421-38560CDB50C9}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
@@ -48,6 +54,7 @@ Global
 		{D572B1A0-5190-4021-9126-32076F2D07F4} = {7D7BED22-8D53-487F-946F-BD5092C7BAE2}
 		{314F4517-B69B-4E1D-816A-9CB4024AF70B} = {4EF08C94-B952-4183-8D20-7036E5FD2661}
 		{9D6E281D-278D-4119-9F6E-4109BB56078A} = {7E9AF29F-12C1-405A-8B40-0041179DEBEC}
+		{A5AE217C-D0AE-40E6-8421-38560CDB50C9} = {4EF08C94-B952-4183-8D20-7036E5FD2661}
 	EndGlobalSection
 	GlobalSection(ExtensibilityGlobals) = postSolution
 		SolutionGuid = {C62476CF-78BF-4D36-8BE2-D57595CE6E16}

@@ -42,3 +42,7 @@ ls -lF /sys/class/tty
 ```bash
 sudo raspi-config
 ```
+
+## Home Assistant
+
+[Home Assistant for Raspberry Pi](https://www.home-assistant.io/installation/raspberrypi)
