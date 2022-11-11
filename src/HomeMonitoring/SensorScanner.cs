@@ -42,21 +42,21 @@ namespace HomeMonitoring
         {
             var activity = _source.StartActivity("Scan");
 
-            var zigbeePort = new ZigBeeSerialPort(serialPort);
+            var zigbeePort = new ZigBeeSerialPort("COM4");
             var dongle = new ZigbeeDongleConBee(zigbeePort);
             var networkManager = new ZigBeeNetworkManager(dongle);
             networkManager.AddNetworkNodeListener(new ConsoleNetworkNodeListener());
             networkManager.AddCommandListener(new ZigBeeTransaction(networkManager));
             networkManager.AddCommandListener(new ConsoleCommandListener(sensorDataPath));
 
-            networkManager.AddSupportedClientCluster(ZclOnOffCluster.CLUSTER_ID);
-            networkManager.AddSupportedClientCluster(ZclMultistateOutputBasicCluster.CLUSTER_ID);
-            networkManager.AddSupportedClientCluster(ZclColorControlCluster.CLUSTER_ID);
-            networkManager.AddSupportedClientCluster(ZclMeteringCluster.CLUSTER_ID);
-            networkManager.AddSupportedClientCluster(ZclPressureMeasurementCluster.CLUSTER_ID);
+            //networkManager.AddSupportedClientCluster(ZclOnOffCluster.CLUSTER_ID);
+            //networkManager.AddSupportedClientCluster(ZclMultistateOutputBasicCluster.CLUSTER_ID);
+            //networkManager.AddSupportedClientCluster(ZclColorControlCluster.CLUSTER_ID);
+            //networkManager.AddSupportedClientCluster(ZclMeteringCluster.CLUSTER_ID);
+            //networkManager.AddSupportedClientCluster(ZclPressureMeasurementCluster.CLUSTER_ID);
 
-            networkManager.AddExtension(new ZigBeeBasicServerExtension());
-            networkManager.AddExtension(new ZigBeeIasCieExtension());
+            //networkManager.AddExtension(new ZigBeeBasicServerExtension());
+            //networkManager.AddExtension(new ZigBeeIasCieExtension());
 
             var dataStore = new JsonNetworkDataStore(databasePath);
             networkManager.SetNetworkDataStore(dataStore);
