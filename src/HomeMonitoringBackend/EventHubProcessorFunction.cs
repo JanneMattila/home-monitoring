@@ -1,30 +1,29 @@
+using Azure.Storage.Blobs;
 using Microsoft.Azure.Functions.Worker;
-using Microsoft.Azure.WebJobs;
 using Microsoft.Extensions.Logging;
 using System;
 using System.Globalization;
-using System.IO;
 using System.Threading.Tasks;
 
 namespace HomeMonitoringBackend;
 
-public static class EventHubProcessorFunction
+public class EventHubProcessorFunction
 {
+    private readonly ILogger _logger;
+
+    public EventHubProcessorFunction(ILoggerFactory loggerFactory)
+    {
+        _logger = loggerFactory.CreateLogger<EventHubProcessorFunction>();
+    }
+
     [Function("EventHubProcessorFunction")]
-    public static async Task Run(
-        [EventHubTrigger("history", Connection = "EventHub")] string[] events,
-        Binder binder,
-        ILogger log)
+    public async Task Run([EventHubTrigger("history", Connection = "EventHub")] string[] events)
     {
         var json = $"[{string.Join(',', events)}]";
         var filename = DateTime.Now.ToString("yyyy/MM/dd/HHmmss-fffff", CultureInfo.InvariantCulture);
-        var attributes = new Attribute[]
-        {
-            new BlobAttribute($"history/{filename}.json", FileAccess.Write),
-            new StorageAccountAttribute("HistoryStorage")
-        };
 
-        using var writer = await binder.BindAsync<TextWriter>(attributes);
-        writer.Write(json);
+        var connectionString = Environment.GetEnvironmentVariable("HistoryStorage");
+        var blobClient = new BlobClient(connectionString, "history", filename + ".json");
+        await blobClient.UploadAsync(BinaryData.FromString(json));
     }
 }

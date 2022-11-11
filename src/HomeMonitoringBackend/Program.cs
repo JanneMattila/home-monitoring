@@ -8,6 +8,12 @@ public class Program
     {
         var host = new HostBuilder()
             .ConfigureFunctionsWorkerDefaults()
+            //.ConfigureFunctionsWorkerDefaults(builder =>
+            //{
+            //    builder
+            //        .AddApplicationInsights()
+            //        .AddApplicationInsightsLogger();
+            //})
             .Build();
 
         host.Run();
