@@ -1,0 +1,10 @@
+{
+  "profiles": {
+    "HomeETL": {
+      "commandName": "Project",
+      "environmentVariables": {
+        "INFLUX_TOKEN": "8lWn8NhukY1k1JqwYC9HHl6K-6i8EUwcyTYICWxk5CBQOcWQftn77CTvTvwoExI5-Ni8ASFgb-QZRNPE5fI7Ew=="
+      }
+    }
+  }
+}
